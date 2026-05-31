@@ -1,0 +1,11 @@
+# Script / artifact tạm khi dev TKB hoặc patch phòng — không commit
+__pycache__/
+*.py[cod]
+*.py
+patch_*.sql
+_tkb_*.json
+*.pyc
+
+# Backup tay (giữ thư mục qua backup/.gitkeep)
+backup/*
+!backup/.gitkeep
