@@ -1,2 +1,0 @@
-﻿// Placeholder file to keep this directory in Git.
-
