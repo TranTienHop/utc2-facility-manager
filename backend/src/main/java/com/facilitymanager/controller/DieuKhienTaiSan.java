@@ -152,7 +152,6 @@ public class DieuKhienTaiSan {
     @Transactional
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!repo.existsById(id)) return ResponseEntity.notFound().build();
-        jdbc.update("DELETE FROM asset_ratings WHERE asset_id = ?", id);
         jdbc.update("DELETE FROM asset_transfers WHERE asset_id = ?", id);
         repo.deleteById(id);
         return ResponseEntity.noContent().build();

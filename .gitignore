@@ -16,6 +16,13 @@ backend/.settings/
 .idea/
 .vscode/
 .settings/
+
+# Cursor AI editor (không đưa vào repo)
+.cursor/
+.cursorrules
+.cursorignore
+**/.cursor/
+AGENTS.md
 *.iml
 Thumbs.db
 Desktop.ini

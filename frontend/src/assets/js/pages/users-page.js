@@ -98,9 +98,6 @@
                     <button class="icon-btn user-update-btn" type="button" title="Cập nhật user">
                       <img src="/assets/icons/update.svg" alt="Cập nhật user" />
                     </button>
-                    <button class="icon-btn user-delete-btn" type="button" title="Xóa user">
-                      <img src="/assets/icons/delete.svg" alt="Xóa user" />
-                    </button>
                   </div>
                 </td>
               </tr>`;
@@ -174,34 +171,25 @@
         return;
       }
       if (target.closest(".user-update-btn")) {
-        const q = new URLSearchParams();
-        if (userKey) q.set("edit", userKey);
-        if (row.dataset.userId) q.set("id", row.dataset.userId);
-        window.location.href = `../profile/users-add.html?${q.toString()}`;
-        return;
-      }
-      if (target.closest(".user-delete-btn")) {
-        const userName = row.cells[2]?.textContent?.trim() || "user này";
-        if (!window.confirm(`Bạn có chắc muốn xóa ${userName}?`)) return;
         const idNguoiDung = row.dataset.userId || row.cells[0]?.textContent?.trim() || "";
-        if (idNguoiDung && layApiNguoiDung()?.xoaNguoiDung) {
-          void (async () => {
-            try {
-              await layApiNguoiDung().xoaNguoiDung(idNguoiDung);
-              row.remove();
-              refreshUsersTable();
-            } catch {
-              window.alert("Xóa user trên máy chủ thất bại.");
-            }
-          })();
-        } else {
-          row.remove();
-          refreshUsersTable();
+        if (!idNguoiDung) {
+          window.alert("Không xác định được user cần cập nhật.");
+          return;
         }
+        window.location.href = `/pages/profile/users-update.html?id=${encodeURIComponent(idNguoiDung)}`;
+        return;
       }
     },
     true
   );
+
+  try {
+    if (sessionStorage.getItem("usersListNeedsReload")) {
+      sessionStorage.removeItem("usersListNeedsReload");
+    }
+  } catch (_) {
+    /* ignore */
+  }
 
   void taiBangNguoiDungTuApi();
 

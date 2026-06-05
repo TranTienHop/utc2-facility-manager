@@ -43,10 +43,10 @@ main.content.page-home {
 }
 
 .home-hero {
-  background: linear-gradient(90deg, var(--color-primary-light) 0%, var(--color-primary) 45%, var(--color-primary-dark) 100%);
+  background: var(--gradient-brand-135);
   color: var(--color-text-on-primary);
   border: none;
-  box-shadow: 0 8px 24px rgba(255, 102, 0, 0.28);
+  box-shadow: 0 8px 24px rgba(74, 111, 227, 0.28);
   padding: 22px 24px;
 }
 
@@ -196,7 +196,7 @@ html[data-fm-lang="ja"] .fm-furigana-sample ruby {
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.04);
+  box-shadow: 0 2px 6px rgba(74, 111, 227, 0.04);
 }
 
 button.home-module-card,
@@ -211,7 +211,7 @@ button.home-module-card:hover:not(:disabled),
 a.home-task-card:hover,
 button.home-task-card:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(255, 102, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(74, 111, 227, 0.12);
   border-color: var(--color-primary-lighter);
 }
 
@@ -240,24 +240,24 @@ button.home-task-card:hover:not(:disabled) {
 }
 
 .home-module-icon--orange {
-  background: #fff0e6;
-  color: #ff6600;
+  background: var(--color-primary-pale);
+  color: var(--color-primary);
 }
 .home-module-icon--yellow {
-  background: #fff4e0;
-  color: var(--color-accent);
+  background: rgba(0, 201, 200, 0.15);
+  color: var(--color-accent-cyan);
 }
 .home-module-icon--green {
   background: #e8f8ef;
   color: #16a34a;
 }
 .home-module-icon--blue {
-  background: #e8f0ff;
-  color: #2563eb;
+  background: var(--color-primary-pale);
+  color: var(--color-primary);
 }
 .home-module-icon--purple {
-  background: #f3e8ff;
-  color: #9333ea;
+  background: rgba(139, 47, 201, 0.12);
+  color: var(--color-accent-purple);
 }
 .home-module-icon--brown {
   background: #f5ebe0;
@@ -313,7 +313,7 @@ button.home-task-card:hover:not(:disabled) {
   background: var(--color-bg-card);
   color: inherit;
   text-decoration: none;
-  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.04);
+  box-shadow: 0 2px 6px rgba(74, 111, 227, 0.04);
 }
 
 .home-task-icon {
@@ -329,10 +329,10 @@ button.home-task-card:hover:not(:disabled) {
 }
 
 .home-task-icon--orange {
-  background: #ff6600;
+  background: var(--gradient-brand);
 }
 .home-task-icon--blue {
-  background: #2563eb;
+  background: var(--color-primary);
 }
 .home-task-icon--green {
   background: #16a34a;

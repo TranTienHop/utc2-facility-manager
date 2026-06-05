@@ -13,4 +13,8 @@
       }
     });
   });
+
+  window.addEventListener("fm-i18n-applied", () => {
+    window.FmI18n?.apply?.(document.querySelector(".room-map-panel") || document);
+  });
 })();

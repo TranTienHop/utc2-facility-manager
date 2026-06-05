@@ -72,8 +72,8 @@ button.nav-item.nav-action-btn {
 
 .nav-item.active {
   background: var(--sidebar-active-bg);
-  border-left-color: transparent;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 4px rgba(255, 255, 255, 0.35);
+  border-left-color: var(--sidebar-accent);
+  box-shadow: none;
 }
 
 .nav-group {
@@ -110,7 +110,7 @@ button.nav-item.nav-action-btn {
 }
 
 .nav-group.open > .nav-group-toggle {
-  border-left-color: rgba(255, 255, 255, 0.85);
+  border-left-color: var(--sidebar-accent);
 }
 
 .nav-submenu {
@@ -192,9 +192,9 @@ button.nav-item.nav-action-btn {
 }
 
 .nav-subitem.active {
-  background: rgba(255, 255, 255, 0.14);
-  border-left-color: transparent;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.95), 0 0 0 4px rgba(255, 255, 255, 0.35);
+  background: var(--sidebar-active-bg);
+  border-left-color: var(--sidebar-accent);
+  box-shadow: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

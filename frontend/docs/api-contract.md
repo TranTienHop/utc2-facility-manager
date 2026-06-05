@@ -254,10 +254,6 @@ Body (`YeuCauDieuChuyenTaiSan`):
 
 Frontend: `FmApi.taoPhieuDieuChuyenTaiSan(assetId, body)`
 
-### Đánh giá tài sản
-
-> **Chưa có API backend** cho rating. Tab đánh giá / đánh giá lại trên `assets.html` dùng state in-memory phía client (`assetRatingHistory` trong `main.js`).
-
 ---
 
 ## Service Request — `/api/requests`

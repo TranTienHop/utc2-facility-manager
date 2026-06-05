@@ -9,6 +9,7 @@
 
   const PATH_TO_PAGE = {
     "/profile/users": "pages/profile/users.html",
+    "/profile/users-update": "pages/profile/users-update.html",
     "/profile/rbac-roles": "pages/profile/rbac-roles.html",
     "/dashboard/departments": "pages/dashboard/departments.html",
     "/dashboard/room-map": "pages/dashboard/room-map.html",
@@ -28,6 +29,9 @@
   };
 
   const MENU_TITLE_TO_I18N_KEY = {
+    "Trang chủ": "sidebar.home",
+    Home: "sidebar.home",
+    ホーム: "sidebar.home",
     "Người dùng": "menu.users",
     "Users": "menu.users",
     "ユーザー": "menu.users",
@@ -37,6 +41,8 @@
     "Quản lí phòng học": "menu.manageRoomManagement",
     "Quản lý phòng học": "menu.manageRoomManagement",
     "Room management": "menu.manageRoomManagement",
+    "教室管理": "menu.manageRoomManagement",
+    "部屋管理": "menu.manageRoomManagement",
     "Tòa nhà & phòng": "menu.buildings",
     "Buildings & rooms": "menu.buildings",
     "建物と部屋": "menu.buildings",
@@ -125,6 +131,16 @@
     return nodes.filter((n) => !shouldStripRoomNavNode(n));
   }
 
+  function navI18nKeyOnLinkOrLabel(el, label) {
+    return String(el?.getAttribute("data-i18n") || label?.getAttribute("data-i18n") || "");
+  }
+
+  function shouldKeepNavI18nKey(key) {
+    return (
+      key.startsWith("sidebar.") || key.startsWith("nav.") || key.startsWith("menu.")
+    );
+  }
+
   function annotateSidebarMenuI18n(navRoot) {
     if (!navRoot) return;
     navRoot.querySelectorAll("a.nav-item").forEach((a) => {
@@ -140,21 +156,28 @@
         a.setAttribute("data-i18n", key);
         return;
       }
-      const keep = a.getAttribute("data-i18n");
-      if (keep && (keep.startsWith("sidebar.") || keep.startsWith("nav."))) return;
+      const keep = navI18nKeyOnLinkOrLabel(a, label);
+      if (shouldKeepNavI18nKey(keep)) return;
       a.removeAttribute("data-i18n");
       label?.removeAttribute("data-i18n");
     });
     navRoot.querySelectorAll("a.nav-subitem").forEach((a) => {
-      const t = (a.textContent || "").trim();
+      const label = a.querySelector(".nav-item-label");
+      const t = ((label || a).textContent || "").trim();
       const key = MENU_TITLE_TO_I18N_KEY[t];
+      if (key && label) {
+        label.setAttribute("data-i18n", key);
+        a.removeAttribute("data-i18n");
+        return;
+      }
       if (key) {
         a.setAttribute("data-i18n", key);
         return;
       }
-      const keep = a.getAttribute("data-i18n");
-      if (keep && (keep.startsWith("sidebar.") || keep.startsWith("nav.") || keep.startsWith("menu."))) return;
+      const keep = navI18nKeyOnLinkOrLabel(a, label);
+      if (shouldKeepNavI18nKey(keep)) return;
       a.removeAttribute("data-i18n");
+      label?.removeAttribute("data-i18n");
     });
     navRoot.querySelectorAll(".nav-group-toggle").forEach((btn) => {
       const label = btn.querySelector(".nav-item-label");
@@ -172,7 +195,7 @@
 
     navRoot.querySelectorAll("a.nav-item, a.nav-subitem").forEach((a) => {
       const t = (a.textContent || "").trim();
-      const m = t.match(/^(?:Tòa nhà|Phòng học)\s+(.+)$/i);
+      const m = t.match(/^(?:Nhà|Tòa nhà|Phòng học)\s+(.+)$/i);
       if (m) {
         a.setAttribute("data-i18n", "menu.buildingNamed");
         a.setAttribute("data-i18n-params", JSON.stringify({ name: m[1].trim() }));
@@ -491,7 +514,7 @@
     const title = String(node?.title || "").trim();
     if (title === "Giảng đường Đa Năng") return "GDDN";
     if (title === "Căn Tin") return "CANTIN";
-    const tm = title.match(/^(?:Tòa nhà|Phòng học)\s+(.+)$/i);
+    const tm = title.match(/^(?:Nhà|Tòa nhà|Phòng học)\s+(.+)$/i);
     if (tm) return tm[1].trim();
     return null;
   }
@@ -537,7 +560,7 @@
     a.className = variant === "top" ? "nav-item" : "nav-subitem nav-subitem--with-icon";
     if (isActiveHref(href)) a.classList.add("active");
     a.href = href;
-    fillNavRow(a, node.title || node.name || "", navIconKey(node));
+    fillNavRow(a, node.title || node.name || "", navIconKey(node), { chevron: false });
     const canonBase = String(canon).split("#")[0];
     const tagName = menuNodeName(node) || slugFromCanonicalPath(canonBase);
     const canonForDataset = canonBase.replace(/^\/+/, "");

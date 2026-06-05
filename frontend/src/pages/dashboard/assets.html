@@ -29,14 +29,28 @@
           </div>
 
           <div id="assetListSection">
-            <div class="table-toolbar">
-              <div class="table-toolbar-left">
-                <span data-i18n="toolbar.showRows">Hiển thị</span>
-                <select id="assetListPageSizeSelect" style="width: 72px; padding: 6px 8px; border: 1px solid #ffd4b3; border-radius: 4px">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>50</option>
-                </select>
+            <div class="table-toolbar assets-list-toolbar">
+              <div class="assets-list-toolbar__main statistics-filters">
+                <label class="statistics-filter">
+                  <span data-i18n="assets.filterBuilding">Lọc theo nhà</span>
+                  <select id="assetFilterBuilding">
+                    <option value="" data-i18n="statistics.filterAll">Tất cả</option>
+                  </select>
+                </label>
+                <label class="statistics-filter">
+                  <span data-i18n="assets.filterRoom">Lọc theo phòng</span>
+                  <select id="assetFilterRoom">
+                    <option value="" data-i18n="statistics.filterAll">Tất cả</option>
+                  </select>
+                </label>
+                <label class="statistics-filter assets-page-size-filter">
+                  <span data-i18n="toolbar.showRows">Hiển thị</span>
+                  <select id="assetListPageSizeSelect">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                  </select>
+                </label>
               </div>
               <div class="table-toolbar-right">
                 <input id="assetListSearchInput" class="table-search-input" type="text" data-i18n-placeholder="buttons.search" placeholder="Tìm kiếm" />
@@ -192,117 +206,6 @@
               <button class="btn btn-success" type="submit" form="assetTransferForm">Điều chuyển</button>
             </div>
           </div>
-
-          <div id="assetRatingSection" hidden>
-            <div class="table-toolbar">
-              <div class="table-toolbar-left">
-                <span data-i18n="toolbar.showRows">Hiển thị</span>
-                <select id="assetRatingPageSizeSelect" style="width: 72px; padding: 6px 8px; border: 1px solid #ffd4b3; border-radius: 4px">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>50</option>
-                </select>
-              </div>
-              <div class="table-toolbar-right">
-                <input id="assetRatingSearchInput" class="table-search-input" type="text" placeholder="Tìm kiếm" />
-              </div>
-            </div>
-            <div style="overflow-x: auto">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Tên</th>
-                    <th>Tòa nhà</th>
-                    <th>Lớp</th>
-                    <th>Đánh giá</th>
-                  </tr>
-                </thead>
-                <tbody id="assetRatingTableBody">
-                  <tr><td colspan="4" style="text-align:center;padding:24px">Đang tải dữ liệu…</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div id="assetReRatingSection" hidden>
-            <div class="tabs">
-              <button id="reRatingTabAllAssets" class="tab tab-active" type="button">Tất cả tài sản</button>
-              <button id="reRatingTabRatedAssets" class="tab" type="button">Tài sản đã đánh giá lại</button>
-            </div>
-            <div id="reRatingTableSection">
-              <div class="table-toolbar">
-                <div class="table-toolbar-left">
-                  <span data-i18n="toolbar.showRows">Hiển thị</span>
-                  <select id="assetReRatingPageSizeSelect" style="width: 72px; padding: 6px 8px; border: 1px solid #ffd4b3; border-radius: 4px">
-                    <option>10</option>
-                    <option>20</option>
-                    <option>50</option>
-                  </select>
-                </div>
-                <div class="table-toolbar-right">
-                  <input id="assetReRatingSearchInput" class="table-search-input" type="text" placeholder="Tìm kiếm" />
-                </div>
-              </div>
-              <div style="overflow-x: auto">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Tên</th>
-                      <th>Tòa nhà</th>
-                      <th>Lớp</th>
-                      <th>Đánh giá</th>
-                    </tr>
-                  </thead>
-                  <tbody id="reRatingTableBody">
-                    <tr><td colspan="5" style="text-align:center;padding:24px">Đang tải dữ liệu…</td></tr>
-                  </tbody>
-                </table>
-              </div>
-              <div id="reRatingHistorySection" class="panel" style="margin-top: 12px" hidden>
-                <h3 id="reRatingHistoryTitle" style="margin-bottom: 10px">Lịch sử đánh giá</h3>
-                <div id="reRatingHistoryList"></div>
-              </div>
-            </div>
-
-            <div id="reRatingFormSection" hidden>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px">
-                <div style="border: 1px solid #ffd4b3; border-radius: 4px">
-                  <h3 style="margin: 0; padding: 8px 12px; background: #ff6600; color: #fff">Thông tin tài sản cần đánh giá</h3>
-                  <form style="padding: 12px" class="form-grid" method="post" action="#">
-                    <div class="field form-span-2"><label for="reInfoName">Tên tài sản</label><input id="reInfoName" name="assetName" /></div>
-                    <div class="field form-span-2"><label for="reInfoUnit">Đơn vị sử dụng</label><input id="reInfoUnit" name="unitName" /></div>
-                    <div class="field form-span-2"><label for="reInfoQuantity">Số lượng</label><input id="reInfoQuantity" name="quantity" /></div>
-                    <div class="field form-span-2"><label for="reInfoPrice">Đơn giá</label><input id="reInfoPrice" name="unitPrice" /></div>
-                    <div class="field form-span-2"><label for="reInfoDuration">Thời hạn sử dụng</label><input id="reInfoDuration" name="duration" /></div>
-                  </form>
-                </div>
-                <div style="border: 1px solid #ffd4b3; border-radius: 4px">
-                  <h3 style="margin: 0; padding: 8px 12px; background: #ff6600; color: #fff">Thông tin tài sản được đánh giá</h3>
-                  <form style="padding: 12px" class="form-grid" method="post" action="#">
-                    <div class="field form-span-2"><label for="reRateReviewer">Người đánh giá</label><input id="reRateReviewer" name="reviewerName" placeholder="Nhập người đánh giá" /></div>
-                    <div class="field form-span-2">
-                      <label for="reRateStars">Số sao</label>
-                      <select id="reRateStars" name="ratingStars">
-                        <option value="">-- Chọn số sao --</option>
-                        <option value="5">★★★★★ (5 sao)</option>
-                        <option value="4">★★★★☆ (4 sao)</option>
-                        <option value="3">★★★☆☆ (3 sao)</option>
-                        <option value="2">★★☆☆☆ (2 sao)</option>
-                        <option value="1">★☆☆☆☆ (1 sao)</option>
-                      </select>
-                    </div>
-                    <div class="field form-span-2"><label for="reRateDate">Thời gian đánh giá</label><input id="reRateDate" name="ratedAt" type="datetime-local" /></div>
-                    <div class="field form-span-2"><label for="reRateNote">Nội dung đánh giá</label><textarea id="reRateNote" name="ratingNote" rows="4" placeholder="Nhập nội dung đánh giá..."></textarea></div>
-                  </form>
-                </div>
-              </div>
-              <div class="actions actions-centered">
-                <button id="reRateSaveBtn" class="btn btn-primary" type="button">Lưu</button>
-                <button id="reRateCancelBtn" class="btn btn-success" type="button">Hủy</button>
-              </div>
-            </div>
-          </div>
         </section>
       </main>
     </div>
@@ -319,7 +222,8 @@
     <script src="../../assets/js/shared/room-helpers.js"></script>
     <script src="../../assets/js/api/api-client.js"></script>
     <script src="../../assets/js/shared/export-json.js"></script>
-    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/shared/asset-i18n.js"></script>
+    <script src="../../assets/js/pages/assets-page.js?v=20260604c"></script>
   </body>
 </html>
 

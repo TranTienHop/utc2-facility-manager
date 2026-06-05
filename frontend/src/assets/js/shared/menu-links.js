@@ -24,8 +24,7 @@ document.querySelectorAll('.nav-submenu a[href$="categories.html"]').forEach((li
 
 const assetsMenuHashMap = {
   "Quản lý tài sản": "",
-  "Đánh giá tài sản": "danh-gia-tai-san",
-  "Đánh giá lại tài sản": "danh-gia-lai-tai-san",
+  "Asset management": "",
 };
 
 document.querySelectorAll('.nav-submenu a[href$="assets.html"]').forEach((link) => {

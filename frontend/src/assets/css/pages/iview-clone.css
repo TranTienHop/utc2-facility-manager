@@ -209,7 +209,7 @@
   padding-left: 18px;
 }
 .iv-switch.is-on {
-  background: var(--primary);
+  background: var(--gradient-brand);
 }
 .iv-switch.is-on::after {
   left: calc(100% - 22px);
@@ -399,7 +399,7 @@
   color: var(--primary);
 }
 .iv-page-item.is-active {
-  background: var(--color-primary);
+  background: var(--gradient-brand);
   border-color: var(--color-primary);
   color: var(--color-text-on-primary);
   font-weight: 700;
@@ -450,7 +450,7 @@
   justify-content: space-between;
   font-weight: 600;
   font-size: 14px;
-  background: var(--color-primary);
+  background: var(--gradient-brand);
   color: var(--color-text-on-primary);
   border-radius: 6px 6px 0 0;
 }

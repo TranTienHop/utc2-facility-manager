@@ -18,6 +18,8 @@
   }
 
   function tMsg(key, fallback, params) {
+    const plain = window.FmI18n?.tPlain?.(key, params);
+    if (plain != null && plain !== key) return plain;
     const v = window.FmI18n?.t?.(key, params);
     return v != null && v !== key ? v : fallback;
   }
@@ -229,24 +231,19 @@
         return;
       }
       const loc = dateLocaleTag();
-      const mg = tMsg("studentRequests.list.managerGroup", "Nhóm quản lý");
-      const pr = tMsg("studentRequests.list.priority", "Mức ưu tiên");
-      const st = tMsg("studentRequests.list.status", "Trạng thái");
-      const tm = tMsg("studentRequests.list.time", "Thời gian");
-      const noTitleRaw = window.FmI18n?.t?.("studentRequests.list.noTitle");
-      const noTitle = noTitleRaw != null && noTitleRaw !== "studentRequests.list.noTitle" ? noTitleRaw : "(Không tiêu đề)";
+      const noTitle = tMsg("studentRequests.list.noTitle", "(Không tiêu đề)");
 
       listEl.innerHTML = rows
         .map((item) => {
           const time = item.createdAt ? new Date(item.createdAt).toLocaleString(loc) : "—";
           const userTitle = String(item.title || "").trim();
-          const titleHtml = userTitle ? escAttr(userTitle) : noTitle;
+          const titleHtml = userTitle ? escAttr(userTitle) : escAttr(noTitle);
           return `<article class="student-card">
           <h3 class="student-item-title">${titleHtml}</h3>
-          <p class="student-item-meta">${escAttr(mg)}: ${escAttr(labelManagerGroup(item.managerGroup))}</p>
-          <p class="student-item-meta">${escAttr(pr)}: <span class="request-priority ${priorityClass(item.priority)}">${escAttr(labelPriority(item.priority))}</span></p>
-          <p class="student-item-meta">${escAttr(st)}: ${escAttr(labelStatus(item.status))}</p>
-          <p class="student-item-meta">${escAttr(tm)}: ${escAttr(time)}</p>
+          <p class="student-item-meta"><span data-i18n="studentRequests.list.managerGroup">Nhóm quản lý</span>: ${escAttr(labelManagerGroup(item.managerGroup))}</p>
+          <p class="student-item-meta"><span data-i18n="studentRequests.list.priority">Mức ưu tiên</span>: <span class="request-priority ${priorityClass(item.priority)}">${escAttr(labelPriority(item.priority))}</span></p>
+          <p class="student-item-meta"><span data-i18n="studentRequests.list.status">Trạng thái</span>: ${escAttr(labelStatus(item.status))}</p>
+          <p class="student-item-meta"><span data-i18n="studentRequests.list.time">Thời gian</span>: ${escAttr(time)}</p>
           <p>${escAttr(item.note || "")}</p>
         </article>`;
         })

@@ -19,8 +19,18 @@
     const hostname = loc && loc.hostname ? loc.hostname : "localhost";
     const protocol = loc && loc.protocol === "https:" ? "https:" : "http:";
     const port = loc && loc.port ? loc.port : "";
-    if (port === "3000" || port === "8088" || port === "80" || port === "443") {
+    if (
+      port === "3000" ||
+      port === "8088" ||
+      port === "80" ||
+      port === "443" ||
+      port === "5173"
+    ) {
       return `${protocol}//${loc.host}`;
+    }
+    /* Live Server / cổng dev khác → proxy Docker frontend (nginx /api → backend). */
+    if (port === "5500" || port === "5501" || port === "4173") {
+      return `${protocol}//${hostname}:3000`;
     }
     return `${protocol}//${hostname}:8080`;
   }

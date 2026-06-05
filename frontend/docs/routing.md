@@ -79,10 +79,8 @@ Hash không hợp lệ → redirect về `default`.
 | Nhãn menu | Hash |
 |-----------|------|
 | Quản lý tài sản | (rỗng) |
-| Đánh giá tài sản | `#danh-gia-tai-san` |
-| Đánh giá lại tài sản | `#danh-gia-lai-tai-san` |
 
-Logic: `main.js` → `applyAssetMode()`.
+Logic: `assets-page.js` — tab danh sách / thêm / điều chuyển.
 
 ## Query string
 

@@ -80,7 +80,8 @@
 }
 
 .statistics-summary-table th {
-  background: #faf6f2;
+  background: var(--color-primary-pale);
+  color: var(--color-primary-dark);
   font-weight: 600;
 }
 
@@ -127,7 +128,7 @@
   margin: 0 0 12px;
   font-size: 15px;
   font-weight: 600;
-  color: var(--color-primary-dark, #5c3d1e);
+  color: var(--color-primary-dark, #2a4fbf);
 }
 
 .statistics-chart-wrap {
@@ -164,14 +165,14 @@
   margin: 8px 0 12px;
   font-size: 16px;
   font-weight: 600;
-  color: var(--color-primary-dark, #5c3d1e);
+  color: var(--color-primary-dark, #2a4fbf);
 }
 
 .statistics-summary-table tfoot th,
 .statistics-summary-table tfoot td {
   font-weight: 700;
-  background: #faf6f2;
-  border-top: 2px solid var(--color-border, #e8edf2);
+  background: var(--color-primary-pale);
+  border-top: 2px solid var(--color-border, #c4d0fa);
 }
 
 .statistics-total-row th {

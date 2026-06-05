@@ -4,7 +4,7 @@ Schema: [`schema.sql`](schema.sql) — tạo database, bảng, seed `users` / `c
 
 Thời khóa biểu: [`seed_tkb.sql`](seed_tkb.sql) — 2353 slot HK1/HK2 2025-2026 + cập nhật `rooms` (lớp, giáo viên). **Không cần file Excel** trên máy mới nếu dùng seed này.
 
-Không seed: `asset_transfers`, `asset_ratings`.
+Không seed: `asset_transfers`.
 
 ## Import thủ công
 

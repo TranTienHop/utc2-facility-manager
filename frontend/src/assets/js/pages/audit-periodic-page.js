@@ -87,6 +87,13 @@
       .replace(/"/g, "&quot;");
   }
 
+  function assetNameLabel(d) {
+    const raw = d.assetName || "";
+    return window.FmAssetName?.translate
+      ? window.FmAssetName.translate(raw, d.itemCategory, d.cardNumber)
+      : raw;
+  }
+
   function renderTable(filterText) {
     const tbody = $("auditDetailsBody");
     if (!tbody) return;
@@ -97,7 +104,7 @@
     }
     const rows = details.filter((d) => {
       if (!q) return true;
-      const hay = [d.cardNumber, d.assetName, d.systemRoom, d.roomCode]
+      const hay = [d.cardNumber, d.assetName, assetNameLabel(d), d.systemRoom, d.roomCode]
         .filter(Boolean)
         .join(" ")
         .toLowerCase();
@@ -115,7 +122,7 @@
         return `<tr class="${rowClass}" data-detail-id="${d.id}">
           <td class="audit-col-stt">${index + 1}</td>
           <td>${escapeHtml(roomLabel(d))}</td>
-          <td>${escapeHtml(d.assetName)}</td>
+          <td>${escapeHtml(assetNameLabel(d))}</td>
           <td>${escapeHtml(d.systemQty)}</td>
           <td><input type="number" min="0" class="audit-act-qty" value="${escapeHtml(actQty)}" ${disabled} /></td>
           <td><input type="text" class="audit-note-input audit-act-note" value="${escapeHtml(d.note || "")}" ${disabled} /></td>

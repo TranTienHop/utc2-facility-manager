@@ -339,8 +339,12 @@
       titleEl.textContent = rt(key, fb);
       titleEl.setAttribute("data-i18n", key);
     }
-    const statusWrap = document.getElementById("requestsFilterStatus")?.closest(".statistics-filter");
-    if (statusWrap) statusWrap.hidden = !!view;
+    const statusWrap = document.getElementById("requestsFilterStatusWrap");
+    if (statusWrap) {
+      const hideStatusFilter = view === "pending" || view === "mine";
+      statusWrap.hidden = hideStatusFilter;
+      statusWrap.style.display = hideStatusFilter ? "none" : "";
+    }
     syncActionsColumnVisibility();
   };
 
@@ -356,6 +360,7 @@
     body.innerHTML = `<tr><td colspan="${tableColspan()}" class="statistics-placeholder">${esc(rt("requests.loading", "Đang tải…"))}</td></tr>`;
 
     const view = getWorkView();
+    const statusFilter = document.getElementById("requestsFilterStatus")?.value || "";
     const priority = document.getElementById("requestsFilterPriority")?.value || "";
     const managerGroup = document.getElementById("requestsFilterGroup")?.value || "";
 
@@ -363,7 +368,11 @@
     if (view === "pending") {
       params.status = "NEW";
     } else if (view === "incomplete") {
-      params.openOnly = "true";
+      if (statusFilter) {
+        params.status = statusFilter;
+      } else {
+        params.openOnly = "true";
+      }
     } else if (view === "mine") {
       params.assignedToMe = "true";
     } else {

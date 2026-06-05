@@ -14,7 +14,7 @@
   const STORAGE_KEY = "fm_ui_lang";
   const SUPPORTED = ["vi", "en", "ja"];
   /** Tăng khi thêm key dịch mới — ép trình duyệt tải lại JSON (tránh cache cũ thiếu key). */
-  const BUNDLE_REV = "20260529f";
+  const BUNDLE_REV = "20260604m";
   const CACHE = new Map();
 
   let currentLocale = "vi";
@@ -46,6 +46,14 @@
       });
     }
     return s;
+  }
+
+  /** Bỏ furigana/rt và thẻ HTML — dùng placeholder, Chart.js, nội dung động. */
+  function plainText(value) {
+    return String(value ?? "")
+      .replace(/<rt[^>]*>[\s\S]*?<\/rt>/gi, "")
+      .replace(/<[^>]+>/g, "")
+      .trim();
   }
 
   function transitionStart() {
@@ -98,6 +106,20 @@
     return interpolate(raw, params);
   }
 
+  function tPlain(key, params) {
+    return plainText(t(key, params));
+  }
+
+  function applyTextKey(el, bundle, key, params) {
+    const raw = getByPath(bundle, key);
+    if (raw == null) return;
+    const s = interpolate(String(raw), params);
+    const label = el.querySelector?.(".nav-item-label");
+    const target = label || el;
+    if (/<\s*ruby\b/i.test(s)) target.innerHTML = s;
+    else target.textContent = s;
+  }
+
   function applyToElement(el, bundle) {
     let params;
     const pr = el.getAttribute("data-i18n-params");
@@ -115,34 +137,27 @@
       if (rawH != null) el.innerHTML = interpolate(String(rawH), params);
     } else {
       const key = el.getAttribute("data-i18n");
-      if (key) {
-        const raw = getByPath(bundle, key);
-        if (raw != null) {
-          const s = interpolate(String(raw), params);
-          if (/<\s*ruby\b/i.test(s)) el.innerHTML = s;
-          else el.textContent = s;
-        }
-      }
+      if (key) applyTextKey(el, bundle, key, params);
     }
     const phKey = el.getAttribute("data-i18n-placeholder");
     if (phKey) {
       const v = getByPath(bundle, phKey);
-      if (v != null) el.setAttribute("placeholder", String(v));
+      if (v != null) el.setAttribute("placeholder", plainText(interpolate(String(v), params)));
     }
     const tiKey = el.getAttribute("data-i18n-title");
     if (tiKey) {
       const v = getByPath(bundle, tiKey);
-      if (v != null) el.setAttribute("title", String(v));
+      if (v != null) el.setAttribute("title", plainText(interpolate(String(v), params)));
     }
     const arKey = el.getAttribute("data-i18n-aria-label");
     if (arKey) {
       const v = getByPath(bundle, arKey);
-      if (v != null) el.setAttribute("aria-label", String(v));
+      if (v != null) el.setAttribute("aria-label", plainText(interpolate(String(v), params)));
     }
     const altKey = el.getAttribute("data-i18n-alt");
     if (altKey) {
       const v = getByPath(bundle, altKey);
-      if (v != null) el.setAttribute("alt", String(v));
+      if (v != null) el.setAttribute("alt", plainText(interpolate(String(v), params)));
     }
   }
 
@@ -215,6 +230,8 @@
     init,
     setLocale,
     t,
+    tPlain,
+    plainText,
     apply,
     getLocale,
     loadBundle,

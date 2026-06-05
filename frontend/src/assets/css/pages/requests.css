@@ -72,6 +72,17 @@
   gap: 8px;
 }
 
+/* Ẩn bộ lọc trạng thái trên các trang công việc (Chờ xử lí, …) */
+.statistics-filter[hidden],
+#requestsFilterStatusWrap[hidden] {
+  display: none !important;
+}
+
+body.requests-view-pending #requestsFilterStatusWrap,
+body.requests-view-mine #requestsFilterStatusWrap {
+  display: none !important;
+}
+
 /* Chưa hoàn thành — không có cột Chức năng */
 body.requests-view-incomplete #requestsColActions,
 body.requests-view-incomplete .requests-actions-cell,
