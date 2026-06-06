@@ -61,25 +61,23 @@
       : { start: DEPT_HK1_START, end: DEPT_HK1_END };
   };
 
-  /** Tiêu đề trang theo tòa đang chọn: «Quản lí nhà E1», «Quản lí nhà E3», ... */
+  /** Tiêu đề trang theo tòa đang chọn. */
   const giuTieuDeTrangPhong = (buildingCode) => {
     if (!deptPageTitle) return;
     const code = chuanHoaMaToa(buildingCode || maToaHienTai());
-    deptPageTitle.removeAttribute("data-i18n");
-    deptPageTitle.removeAttribute("data-i18n-params");
     if (!code) {
-      deptPageTitle.textContent = "Quản lí phòng học";
+      setDeptPageTitle("departments.manageAll");
       return;
     }
     if (code === "GDDN") {
-      deptPageTitle.textContent = "Quản lí Giảng đường Đa Năng";
+      setDeptPageTitle("departments.manageVenueLectureHall");
       return;
     }
     if (code === "CANTIN") {
-      deptPageTitle.textContent = "Quản lí Căn Tin";
+      setDeptPageTitle("departments.manageVenueCanteen");
       return;
     }
-    deptPageTitle.textContent = `Quản lí nhà ${code}`;
+    setDeptPageTitle("departments.manageBuilding", { code });
   };
 
   const chuanHoaMaToa = (code) => {
@@ -121,6 +119,32 @@
   const deptT = (key, params) => {
     const v = window.FmI18n?.t?.(key, params);
     return v != null && v !== key ? v : key;
+  };
+
+  const deptTPlain = (key, params) => {
+    const v = window.FmI18n?.tPlain?.(key, params);
+    return v != null && v !== key ? v : deptT(key, params);
+  };
+
+  const isVacantClassName = (value) => {
+    const s = String(value ?? "").trim();
+    if (!s || s === "-" || s === "--") return true;
+    const lower = s.toLowerCase();
+    return lower === "trống" || lower === "trong";
+  };
+
+  const formatClassInUse = (value) => {
+    if (isVacantClassName(value)) return deptT("departments.classVacant");
+    return String(value).trim();
+  };
+
+  const setDeptPageTitle = (key, params) => {
+    if (!deptPageTitle) return;
+    deptPageTitle.removeAttribute("data-i18n");
+    deptPageTitle.removeAttribute("data-i18n-params");
+    const raw = deptT(key, params);
+    if (/<\s*ruby\b/i.test(raw)) deptPageTitle.innerHTML = raw;
+    else deptPageTitle.textContent = deptTPlain(key, params);
   };
 
   const formatIsoDate = (date) => {
@@ -207,10 +231,7 @@
   const buildDepartmentRoomTr = (room, buildingCode) => {
     const uiRow = roomRowForUi(room);
     const roomFloor = uiRow[1] != null && String(uiRow[1]).trim() !== "" ? String(uiRow[1]).trim() : "";
-    const roomClass =
-      uiRow[2] != null && String(uiRow[2]).trim() !== "" && uiRow[2] !== "-"
-        ? String(uiRow[2]).trim()
-        : "Trống";
+    const roomClass = formatClassInUse(uiRow[2]);
     const roomTeacher =
       uiRow[3] != null && String(uiRow[3]).trim() !== "" && uiRow[3] !== "-"
         ? String(uiRow[3]).trim()
@@ -244,7 +265,7 @@
     const rows = sortRoomRowsByFloor(buildingRooms[code] || []);
     if (rows.length === 0) {
       body.innerHTML =
-        '<tr><td colspan="6" style="text-align:center;padding:24px">Không có phòng.</td></tr>';
+        `<tr><td colspan="6" style="text-align:center;padding:24px">${deptT("departments.noRooms")}</td></tr>`;
     } else {
       body.innerHTML = rows
         .map((room) => buildDepartmentRoomTr(room, code))
@@ -314,9 +335,9 @@
   };
 
   window.addEventListener("fm-i18n-applied", () => {
-    renderDeptTableHead();
+    const code = maToaHienTai();
+    renderRooms(code, buildingLabelForCode(code));
     khoiTaoBoLoc(false);
-    queueMicrotask(giuTieuDeTrangPhong);
   });
 
   giuTieuDeTrangPhong();

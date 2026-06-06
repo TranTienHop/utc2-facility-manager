@@ -17,6 +17,42 @@
   const trMsg = (k, params) =>
     window.FmI18n && typeof window.FmI18n.t === "function" ? window.FmI18n.t(k, params) : k;
 
+  const ROLE_CODE_TO_I18N = {
+    ADMIN: "rbacRoles.roleAdmin",
+    MANAGER: "rbacRoles.roleManager",
+    STAFF: "rbacRoles.roleStaff",
+    STUDENT: "rbacRoles.roleStudent",
+  };
+
+  const translateRoleDisplayName = (name, code) => {
+    const c = String(code || "").trim().toUpperCase();
+    const key = ROLE_CODE_TO_I18N[c];
+    if (key) {
+      const v = trMsg(key);
+      if (v && v !== key) return window.FmI18n?.tPlain?.(key) || v;
+    }
+    return String(name || "");
+  };
+
+  const translateMenuTitle = (title) => {
+    if (window.FmMenuTitleI18n && typeof window.FmMenuTitleI18n.translate === "function") {
+      return window.FmMenuTitleI18n.translate(title);
+    }
+    return String(title || "");
+  };
+
+  const refreshPermModalIfOpen = () => {
+    if (!permMask?.classList.contains("is-open") || !state.editingPermRoleId) return;
+    const row = state.serverRows.find((r) => r.id === state.editingPermRoleId);
+    if (!row) return;
+    permTitleEl.textContent = `${translateRoleDisplayName(row.name, row.code)} (${row.code}) ${trMsg(
+      "rbacRoles.permTitleSuffix",
+    )}`;
+    if (!state.permFlatCache) return;
+    const tree = filterVisiblePermissionTree(window.RbacApi.hierarchyFromFlatPermissions(state.permFlatCache));
+    renderPermSidebarTree(tree, permTreeHost, state.checkedPermIds);
+  };
+
   const state = {
     serverRows: [],
     filterName: "",
@@ -73,12 +109,12 @@
     const sel = document.getElementById("parentRoleSelect");
     if (!sel) return;
     const previous = String(sel.value || "");
-    sel.innerHTML = '<option value="">— Không kế thừa —</option>';
+    sel.innerHTML = `<option value="">${escapeHtml(trMsg("rbacRoles.noInherit"))}</option>`;
     state.serverRows.forEach((r) => {
       if (excludeId && r.id === excludeId) return;
       const opt = document.createElement("option");
       opt.value = r.id;
-      opt.textContent = `${r.name} (${r.code})`;
+      opt.textContent = `${translateRoleDisplayName(r.name, r.code)} (${r.code})`;
       sel.appendChild(opt);
     });
     if (previous && Array.from(sel.options).some((o) => o.value === previous)) {
@@ -182,7 +218,7 @@
           const btn = document.createElement("button");
           btn.type = "button";
           btn.className = "nav-group-toggle";
-          btn.innerHTML = `<span>${escapeHtml(node.title)}</span><span class="nav-caret">▾</span>`;
+          btn.innerHTML = `<span>${escapeHtml(translateMenuTitle(node.title))}</span><span class="nav-caret">▾</span>`;
 
           btn.addEventListener("click", () => {
             grp.classList.toggle("open");
@@ -207,7 +243,7 @@
           cb.className = "sidebar-tree-cb";
           bindCheckbox(cb, idStr, checkedSet);
           const span = document.createElement("span");
-          span.textContent = node.title;
+          span.textContent = translateMenuTitle(node.title);
           label.appendChild(cb);
           label.appendChild(span);
           container.appendChild(label);
@@ -289,13 +325,14 @@
     tbody.innerHTML = pageRows
       .map((row, idx) => {
         const ordinal = start + idx + 1;
-        const nameCell = `${escapeHtml(row.name)}<div style="font-size:12px;color:var(--muted, #888)">${escapeHtml(
+        const displayName = translateRoleDisplayName(row.name, row.code);
+        const nameCell = `${escapeHtml(displayName)}<div style="font-size:12px;color:var(--muted, #888)">${escapeHtml(
           row.code,
         )}</div>${
           row.parentRoleCode
-            ? `<div style="font-size:11px;color:var(--muted2, #666);margin-top:2px">↳ Kế thừa: ${escapeHtml(
-                row.parentRoleCode,
-              )}</div>`
+            ? `<div style="font-size:11px;color:var(--muted2, #666);margin-top:2px">${escapeHtml(
+                trMsg("rbacRoles.inheritsPrefix"),
+              )} ${escapeHtml(row.parentRoleCode)}</div>`
             : ""
         }`;
         return `
@@ -449,7 +486,7 @@
   async function openPerm(row) {
     state.editingPermRoleId = row.id;
     state.checkedPermIds = new Set((row.menuIds || []).map((p) => String(p)));
-    permTitleEl.textContent = `${row.name} (${row.code}) ${trMsg("rbacRoles.permTitleSuffix")}`;
+    permTitleEl.textContent = `${translateRoleDisplayName(row.name, row.code)} (${row.code}) ${trMsg("rbacRoles.permTitleSuffix")}`;
     showMask(permMask);
     if (permSpin) permSpin.hidden = false;
     permTreeHost.innerHTML = "";
@@ -462,7 +499,7 @@
     } catch (e) {
       console.error(e);
       permTreeHost.innerHTML = `<div class="iv-tree-empty" style="color:var(--error, #c00)">${escapeHtml(
-        e.message || "Không tải được cây quyền.",
+        e.message || trMsg("rbacRoles.permTreeLoadError"),
       )}</div>`;
     } finally {
       if (permSpin) permSpin.hidden = true;
@@ -560,6 +597,8 @@
   window.addEventListener("fm-i18n-applied", () => {
     renderTable();
     renderPager();
+    fillParentRoleSelect(state.editingMode === 1 ? editForm?.elements?.id?.value : null);
+    refreshPermModalIfOpen();
   });
 
   void loadRoles();

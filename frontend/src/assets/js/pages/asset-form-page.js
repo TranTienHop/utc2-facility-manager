@@ -2,6 +2,11 @@
  * Trang dashboard/asset-view.html & asset-update.html
  */
 (function assetFormPageScope() {
+  const assetI18n = () => window.AppAssetI18n || {};
+  const assetT = (key, params) => {
+    const fn = assetI18n().t;
+    return typeof fn === "function" ? fn(key, params) : key;
+  };
 
   const esc = (s) =>
     String(s ?? "")
@@ -85,12 +90,17 @@
             const roomCode = String(room.roomCode || "").trim();
             const buildingCode = String(room.buildingCode || "").trim();
             if (!id || !roomCode) return "";
-            const label = `${roomCode}${buildingCode ? ` - Nhà ${buildingCode}` : ""}`;
+            const labelFn = assetI18n().roomSelectLabel;
+            const label =
+              typeof labelFn === "function"
+                ? labelFn(roomCode, buildingCode)
+                : `${roomCode}${buildingCode ? ` - Nhà ${buildingCode}` : ""}`;
             return `<option value="${esc(id)}" data-room-code="${esc(roomCode)}">${esc(label)}</option>`;
           })
           .filter(Boolean)
           .join("");
-        roomSelect.innerHTML = `<option value="">-- Chọn phòng --</option>${options}`;
+        const roomPh = assetI18n().placeholderRoom?.() || "-- Chọn phòng --";
+        roomSelect.innerHTML = `<option value="">${esc(roomPh)}</option>${options}`;
         if (selectedRoomId && [...roomSelect.options].some((o) => o.value === selectedRoomId)) {
           roomSelect.value = selectedRoomId;
         } else if (selectedRoomCode) {
@@ -115,8 +125,16 @@
             value: String(c.code || c.categoryCode || ""),
             label: String(c.name || c.categoryName || c.code || ""),
           }));
-        ganTuyChonCode("assetCategoryInput", toOpts(assets), "-- Chọn danh mục --");
-        ganTuyChonCode("assetFundInput", toOpts(funds), "-- Chọn nguồn kinh phí --");
+        ganTuyChonCode(
+          "assetCategoryInput",
+          toOpts(assets),
+          assetI18n().placeholderCategory?.() || "-- Chọn danh mục --",
+        );
+        ganTuyChonCode(
+          "assetFundInput",
+          toOpts(funds),
+          assetI18n().placeholderFund?.() || "-- Chọn nguồn kinh phí --",
+        );
       } catch (err) {
         console.warn("[Tài sản] Không tải danh mục cho form:", err);
       }
@@ -131,7 +149,17 @@
       });
       void taiDanhSachPhong(String(p.roomId || ""), String(p.roomCode || p.classroom || ""));
     };
+
+    let latestPayload = payload;
     void taiTuyChonDanhMucChoForm().then(() => applyAssetDetailFields(payload));
+
+    window.addEventListener("fm-i18n-applied", () => {
+      window.FmI18n?.apply?.(document);
+      const p = latestPayload || payload;
+      void taiTuyChonDanhMucChoForm().then(() => {
+        applyAssetDetailFields(p);
+      });
+    });
 
     const idTaiSan = payload.id != null ? String(payload.id) : "";
     if (idTaiSan && window.CoSoApi?.layTaiSanTheoId) {
@@ -140,9 +168,10 @@
           const raw = await window.CoSoApi.layTaiSanTheoId(idTaiSan);
           const p2 = tuDoiTuongTaiSan(raw);
           if (p2) {
-            applyAssetDetailFields({ ...payload, ...p2 });
+            latestPayload = { ...payload, ...p2 };
+            applyAssetDetailFields(latestPayload);
             try {
-              sessionStorage.setItem(ASSET_SELECTED_KEY, JSON.stringify({ ...payload, ...p2 }));
+              sessionStorage.setItem(ASSET_SELECTED_KEY, JSON.stringify(latestPayload));
             } catch (_) {}
           }
         } catch (e) {
@@ -197,7 +226,7 @@
         } catch (e) {
           window.alert("Cập nhật trên máy chủ thất bại.");
         }
-        window.alert("Cập nhật tài sản thành công!");
+        window.alert(assetT("assets.updateSuccess"));
         window.location.href = "assets.html";
       })();
     });

@@ -40,6 +40,12 @@
     const placeholderOption = placeholder ? `<option value="">${thoatThuocTinh(placeholder)}</option>` : "";
     select.innerHTML = `${placeholderOption}${htmlOptions}`;
   };
+  const assetI18n = () => window.AppAssetI18n || {};
+  const assetT = (key, params) => {
+    const fn = assetI18n().t;
+    return typeof fn === "function" ? fn(key, params) : key;
+  };
+
   const taiTuyChonDanhMucChoFormTaiSan = async () => {
     const api = window.FmApi || window.CoSoApi;
     if (!api?.layDanhSachDanhMuc) return;
@@ -53,8 +59,16 @@
           value: String(c.code || c.categoryCode || ""),
           label: String(c.name || c.categoryName || c.code || ""),
         }));
-      ganTuyChonCode("assetCategoryInput", toOpts(assets), "-- Chọn danh mục --");
-      ganTuyChonCode("assetFundInput", toOpts(funds), "-- Chọn nguồn kinh phí --");
+      ganTuyChonCode(
+        "assetCategoryInput",
+        toOpts(assets),
+        assetI18n().placeholderCategory?.() || "-- Chọn danh mục --",
+      );
+      ganTuyChonCode(
+        "assetFundInput",
+        toOpts(funds),
+        assetI18n().placeholderFund?.() || "-- Chọn nguồn kinh phí --",
+      );
     } catch (err) {
       console.warn("[Tài sản] Không tải danh mục cho form:", err);
     }
@@ -97,6 +111,8 @@
           const tenHienThi = window.FmAssetName?.translate
             ? window.FmAssetName.translate(ten, dm, card)
             : ten;
+          const pillOn = assetT("assets.statusPillOnTitle");
+          const pillOff = assetT("assets.statusPillOffTitle");
           return `<tr
             data-asset-id="${thoatThuocTinh(id)}"
             data-status="${thoatThuocTinh(tt)}"
@@ -127,17 +143,17 @@
             <td>${thoatThuocTinh(tenHienThi)}</td>
             <td>${thoatThuocTinh(sl)}</td>
             <td>${thoatThuocTinh(phong || toa)}</td>
-            <td><button type="button" class="status-pill asset-status-pill${dangHoatDong ? " on" : ""}" aria-pressed="${dangHoatDong}" data-asset-active="${dangHoatDong ? "1" : "0"}" title="${dangHoatDong ? "Đang sử dụng — bấm để bảo trì" : "Đang bảo trì — bấm để đưa vào sử dụng"}"></button></td>
+            <td><button type="button" class="status-pill asset-status-pill${dangHoatDong ? " on" : ""}" aria-pressed="${dangHoatDong}" data-asset-active="${dangHoatDong ? "1" : "0"}" title="${thoatThuocTinh(dangHoatDong ? pillOn : pillOff)}"></button></td>
             <td>
               <div class="room-action-buttons user-action-buttons">
-                <button class="icon-btn asset-view-btn" type="button" title="Xem chi tiết">
-                  <img src="/assets/icons/view_infor.svg" alt="Xem chi tiết" />
+                <button class="icon-btn asset-view-btn" type="button" title="${thoatThuocTinh(assetT("assets.actionView"))}">
+                  <img src="/assets/icons/view_infor.svg" alt="${thoatThuocTinh(assetT("assets.actionView"))}" />
                 </button>
-                <button class="icon-btn asset-transfer-btn" type="button" title="Điều chuyển">
-                  <img src="/assets/icons/dieu_chuyen_1.svg" alt="Điều chuyển" />
+                <button class="icon-btn asset-transfer-btn" type="button" title="${thoatThuocTinh(assetT("assets.actionTransfer"))}">
+                  <img src="/assets/icons/dieu_chuyen_1.svg" alt="${thoatThuocTinh(assetT("assets.actionTransfer"))}" />
                 </button>
-                <button class="icon-btn asset-update-btn" type="button" title="Cập nhật">
-                  <img src="/assets/icons/update.svg" alt="Cập nhật" />
+                <button class="icon-btn asset-update-btn" type="button" title="${thoatThuocTinh(assetT("assets.actionUpdate"))}">
+                  <img src="/assets/icons/update.svg" alt="${thoatThuocTinh(assetT("assets.actionUpdate"))}" />
                 </button>
               </div>
             </td>
@@ -152,21 +168,9 @@
   /** @type {{ roomCode: string, buildingCode: string }[]} */
   let danhSachPhongLoc = [];
 
-  const nhaDacBiet = {
-    GDDN: { key: "menu.venueLectureHall", fb: "Giảng đường Đa Năng" },
-    CANTIN: { key: "menu.venueCanteen", fb: "Căn Tin" },
-  };
-
   const nhanHienThiNha = (code) => {
-    const c = String(code || "").trim().toUpperCase();
-    if (!c) return "";
-    const sp = nhaDacBiet[c];
-    if (sp) {
-      return typeof window.FmI18n?.t === "function" ? window.FmI18n.t(sp.key, sp.fb) : sp.fb;
-    }
-    return typeof window.FmI18n?.t === "function"
-      ? window.FmI18n.t("assets.buildingShort", { name: c }, `nhà ${c}`)
-      : `nhà ${c}`;
+    const fn = assetI18n().buildingDisplayLabel;
+    return typeof fn === "function" ? fn(code) : String(code || "");
   };
 
   const timNhaTheoMaPhong = (roomCode) => {
@@ -286,7 +290,7 @@
       console.error("[Tài sản] Thiếu FmApi.layDanhSachTaiSan");
       return;
     }
-    hienTrangThaiBang("Đang tải dữ liệu…", "table-loading-row");
+    hienTrangThaiBang(assetT("assets.loading"), "table-loading-row");
     try {
       const list = await api.layDanhSachTaiSan();
       if (!Array.isArray(list)) {
@@ -294,7 +298,7 @@
         return;
       }
       if (!list.length) {
-        hienTrangThaiBang("Chưa có tài sản trong CSDL.", "table-empty-row");
+        hienTrangThaiBang(assetT("assets.emptyList"), "table-empty-row");
         return;
       }
       assetTableBody.innerHTML = list.map(taoHangTaiSanTuDto).join("");
@@ -409,12 +413,17 @@
           const roomCode = String(room.roomCode || "").trim();
           const buildingCode = String(room.buildingCode || "").trim();
           if (!id || !roomCode) return "";
-          const label = `${roomCode}${buildingCode ? ` - Nhà ${buildingCode}` : ""}`;
+          const labelFn = assetI18n().roomSelectLabel;
+          const label =
+            typeof labelFn === "function"
+              ? labelFn(roomCode, buildingCode)
+              : `${roomCode}${buildingCode ? ` - Nhà ${buildingCode}` : ""}`;
           return `<option value="${thoatThuocTinh(id)}" data-room-code="${thoatThuocTinh(roomCode)}">${thoatThuocTinh(label)}</option>`;
         })
         .filter(Boolean)
         .join("");
-      roomSelect.innerHTML = `<option value="">-- Chọn phòng --</option>${options}`;
+      const roomPh = assetI18n().placeholderRoom?.() || "-- Chọn phòng --";
+      roomSelect.innerHTML = `<option value="">${thoatThuocTinh(roomPh)}</option>${options}`;
       if (selectedRoomId && [...roomSelect.options].some((o) => o.value === selectedRoomId)) {
         roomSelect.value = selectedRoomId;
       } else if (selectedRoomCode) {
@@ -462,7 +471,7 @@
       } catch (e) {
         window.alert("Gửi thêm tài sản lên máy chủ thất bại.");
       }
-      window.alert("Thêm tài sản thành công!");
+      window.alert(assetT("assets.addSuccess"));
       assetDetailForm.reset();
       switchAssetTab("list");
       await taiBangTaiSanTuApi();
@@ -473,7 +482,7 @@
     pill.classList.toggle("on", active);
     pill.setAttribute("aria-pressed", active ? "true" : "false");
     pill.dataset.assetActive = active ? "1" : "0";
-    pill.title = active ? "Đang sử dụng — bấm để bảo trì" : "Đang bảo trì — bấm để đưa vào sử dụng";
+    pill.title = active ? assetT("assets.statusPillOnTitle") : assetT("assets.statusPillOffTitle");
   };
 
   const capNhatTrangThaiTaiSan = async (assetId, active) => {
@@ -602,7 +611,7 @@
           receiverName,
           note,
         });
-        window.alert("Điều chuyển tài sản thành công.");
+        window.alert(assetT("assets.transferSuccess"));
         form.reset();
         await taiBangTaiSanTuApi();
         switchAssetTab("list");
@@ -664,5 +673,13 @@
   window.addEventListener("fm-i18n-applied", () => {
     ganTuyChonLocNha();
     void taiBangTaiSanTuApi();
+    void taiTuyChonDanhMucChoFormTaiSan();
+    const roomSelect = document.getElementById("assetRoomInput");
+    if (roomSelect instanceof HTMLSelectElement && roomSelect.value) {
+      const selectedId = roomSelect.value;
+      const selectedCode =
+        roomSelect.selectedOptions?.[0]?.getAttribute("data-room-code") || "";
+      void taiDanhSachPhongChoTaiSan(selectedId, selectedCode);
+    }
   });
 })();

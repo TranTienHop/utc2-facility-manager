@@ -14,7 +14,7 @@
   const STORAGE_KEY = "fm_ui_lang";
   const SUPPORTED = ["vi", "en", "ja"];
   /** Tăng khi thêm key dịch mới — ép trình duyệt tải lại JSON (tránh cache cũ thiếu key). */
-  const BUNDLE_REV = "20260604m";
+  const BUNDLE_REV = "20260606f";
   const CACHE = new Map();
 
   let currentLocale = "vi";

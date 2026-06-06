@@ -129,11 +129,11 @@
               <input class="iv-input" type="text" name="description" />
             </div>
             <div class="iv-form-item iv-form-item-full">
-              <label class="iv-form-item-label" for="parentRoleSelect">Kế thừa quyền (RBAC1)</label>
+              <label class="iv-form-item-label" for="parentRoleSelect" data-i18n="rbacRoles.labelInherit">Kế thừa quyền (RBAC1)</label>
               <select class="iv-input" id="parentRoleSelect" name="parentRoleId">
-                <option value="">— Không kế thừa —</option>
+                <option value="" data-i18n="rbacRoles.noInherit">— Không kế thừa —</option>
               </select>
-              <p class="iv-form-hint" style="font-size: 12px; color: var(--muted, #888); margin-top: 6px">
+              <p class="iv-form-hint" style="font-size: 12px; color: var(--muted, #888); margin-top: 6px" data-i18n="rbacRoles.inheritHint">
                 Menu hiệu lực = menu gán cho vai trò này ∪ menu của các vai trò cha.
               </p>
             </div>

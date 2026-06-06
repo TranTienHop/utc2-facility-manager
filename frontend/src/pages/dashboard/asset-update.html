@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cập nhật tài sản</title>
+    <title data-i18n="assets.updatePageTitle">Cập nhật tài sản</title>
     <link rel="stylesheet" href="../../assets/css/base.css" />
     <link rel="stylesheet" href="../../assets/css/layout.css" />
     <link rel="stylesheet" href="../../assets/css/components.css" />
@@ -21,37 +21,37 @@
         </header>
 
         <section class="panel">
-          <h1 class="page-title">Cập nhật tài sản</h1>
+          <h1 class="page-title" data-i18n="assets.updatePageTitle">Cập nhật tài sản</h1>
           <div class="asset-detail-section">
             <form id="assetUpdateForm" class="form-grid asset-detail-form" method="post" action="#">
-              <div class="field form-span-2"><label for="assetNameInput">Tên tài sản</label><input id="assetNameInput" name="assetName" type="text" /></div>
+              <div class="field form-span-2"><label for="assetNameInput" data-i18n="assets.fieldName">Tên tài sản</label><input id="assetNameInput" name="assetName" type="text" /></div>
               <input id="assetCardInput" name="cardNumber" type="hidden" />
-              <div class="field"><label for="assetCategoryInput">Mục tài sản</label><select id="assetCategoryInput" name="itemCategory"></select></div>
-              <div class="field"><label for="assetRoomInput">Phòng</label><select id="assetRoomInput" name="roomId"><option value="">-- Chọn phòng --</option></select></div>
-              <div class="field"><label for="assetQuantityInput">Số lượng</label><input id="assetQuantityInput" name="quantity" type="number" min="0" step="1" inputmode="numeric" /></div>
-              <div class="field"><label for="assetStatusInput">Tình trạng</label><select id="assetStatusInput" name="status"><option value="IN_USE">Đang sử dụng</option><option value="MAINTENANCE">Bảo trì</option><option value="BROKEN">Hư hỏng</option></select></div>
-              <div class="field"><label for="assetPurchaseDateInput">Ngày mua</label><input id="assetPurchaseDateInput" name="purchaseDate" type="date" /></div>
-              <div class="field"><label for="assetFundInput">Nguồn kinh phí</label><select id="assetFundInput" name="fundSource"></select></div>
-              <div class="field form-span-2"><label for="assetNoteInput">Ghi chú</label><textarea id="assetNoteInput" name="note" class="asset-note-input" rows="4"></textarea></div>
+              <div class="field"><label for="assetCategoryInput" data-i18n="assets.fieldCategory">Mục tài sản</label><select id="assetCategoryInput" name="itemCategory"></select></div>
+              <div class="field"><label for="assetRoomInput" data-i18n="assets.fieldRoom">Phòng</label><select id="assetRoomInput" name="roomId"><option value="" data-i18n="assets.placeholderSelectRoom">-- Chọn phòng --</option></select></div>
+              <div class="field"><label for="assetQuantityInput" data-i18n="assets.fieldQuantity">Số lượng</label><input id="assetQuantityInput" name="quantity" type="number" min="0" step="1" inputmode="numeric" /></div>
+              <div class="field"><label for="assetStatusInput" data-i18n="assets.fieldStatus">Tình trạng</label><select id="assetStatusInput" name="status"><option value="IN_USE" data-i18n="assets.statusInUse">Đang sử dụng</option><option value="MAINTENANCE" data-i18n="assets.statusMaintenance">Bảo trì</option><option value="BROKEN" data-i18n="assets.statusBroken">Hư hỏng</option></select></div>
+              <div class="field"><label for="assetPurchaseDateInput" data-i18n="assets.fieldPurchaseDate">Ngày mua</label><input id="assetPurchaseDateInput" name="purchaseDate" type="date" /></div>
+              <div class="field"><label for="assetFundInput" data-i18n="assets.fieldFundSource">Nguồn kinh phí</label><select id="assetFundInput" name="fundSource"></select></div>
+              <div class="field form-span-2"><label for="assetNoteInput" data-i18n="assets.fieldNote">Ghi chú</label><textarea id="assetNoteInput" name="note" class="asset-note-input" rows="4"></textarea></div>
               <div class="form-span-2">
                 <details>
-                  <summary>Thông tin nâng cao</summary>
+                  <summary data-i18n="assets.sectionAdvanced">Thông tin nâng cao</summary>
                   <div class="form-grid" style="margin-top: 10px">
-                    <div class="field"><label for="assetProviderInput">Nhà cung cấp</label><input id="assetProviderInput" name="provider" type="text" /></div>
-                    <div class="field"><label for="assetCountryInput">Nước sản xuất</label><input id="assetCountryInput" name="country" type="text" /></div>
-                    <div class="field"><label for="assetTypeInput">Loại tài sản</label><input id="assetTypeInput" name="assetType" type="text" /></div>
-                    <div class="field"><label for="assetManufactureYearInput">Năm sản xuất</label><input id="assetManufactureYearInput" name="manufactureYear" type="number" min="1900" max="2100" step="1" /></div>
-                    <div class="field"><label for="assetUnitPriceInput">Đơn giá</label><input id="assetUnitPriceInput" name="unitPrice" type="number" min="0" step="1000" inputmode="numeric" /></div>
-                    <div class="field"><label for="assetOriginalPriceInput">Nguyên giá</label><input id="assetOriginalPriceInput" name="originalPrice" type="number" min="0" step="1000" inputmode="numeric" /></div>
-                    <div class="field"><label for="assetUsageTimeInput">Thời gian SD</label><input id="assetUsageTimeInput" name="usageTime" type="number" min="0" step="1" inputmode="numeric" /></div>
-                    <div class="field"><label for="assetUsageYearInput">Năm sử dụng</label><input id="assetUsageYearInput" name="usageYear" type="number" min="1900" max="2100" step="1" /></div>
+                    <div class="field"><label for="assetProviderInput" data-i18n="assets.fieldProvider">Nhà cung cấp</label><input id="assetProviderInput" name="provider" type="text" /></div>
+                    <div class="field"><label for="assetCountryInput" data-i18n="assets.fieldCountry">Nước sản xuất</label><input id="assetCountryInput" name="country" type="text" /></div>
+                    <div class="field"><label for="assetTypeInput" data-i18n="assets.fieldAssetType">Loại tài sản</label><input id="assetTypeInput" name="assetType" type="text" /></div>
+                    <div class="field"><label for="assetManufactureYearInput" data-i18n="assets.fieldManufactureYear">Năm sản xuất</label><input id="assetManufactureYearInput" name="manufactureYear" type="number" min="1900" max="2100" step="1" /></div>
+                    <div class="field"><label for="assetUnitPriceInput" data-i18n="assets.fieldUnitPrice">Đơn giá</label><input id="assetUnitPriceInput" name="unitPrice" type="number" min="0" step="1000" inputmode="numeric" /></div>
+                    <div class="field"><label for="assetOriginalPriceInput" data-i18n="assets.fieldOriginalPrice">Nguyên giá</label><input id="assetOriginalPriceInput" name="originalPrice" type="number" min="0" step="1000" inputmode="numeric" /></div>
+                    <div class="field"><label for="assetUsageTimeInput" data-i18n="assets.fieldUsageTime">Thời gian SD</label><input id="assetUsageTimeInput" name="usageTime" type="number" min="0" step="1" inputmode="numeric" /></div>
+                    <div class="field"><label for="assetUsageYearInput" data-i18n="assets.fieldUsageYear">Năm sử dụng</label><input id="assetUsageYearInput" name="usageYear" type="number" min="1900" max="2100" step="1" /></div>
                   </div>
                 </details>
               </div>
             </form>
             <div class="actions actions-centered asset-detail-actions">
-              <button class="btn btn-primary" type="submit" form="assetUpdateForm">Cập nhật</button>
-              <button id="assetUpdateBackBtn" class="btn btn-success" type="button">Hủy</button>
+              <button class="btn btn-primary" type="submit" form="assetUpdateForm" data-i18n="assets.btnUpdate">Cập nhật</button>
+              <button id="assetUpdateBackBtn" class="btn btn-success" type="button" data-i18n="assets.btnCancel">Hủy</button>
             </div>
           </div>
         </section>
@@ -69,6 +69,7 @@
     <script src="../../assets/js/shared/table-controls.js"></script>
     <script src="../../assets/js/shared/room-helpers.js"></script>
     <script src="../../assets/js/api/api-client.js"></script>
+    <script src="../../assets/js/shared/asset-form-i18n.js"></script>
     <script src="../../assets/js/pages/asset-form-page.js"></script>
   </body>
 </html>

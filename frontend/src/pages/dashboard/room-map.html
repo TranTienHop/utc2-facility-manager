@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sơ đồ phòng học</title>
+    <title data-i18n="roomMap.pageTitle">Sơ đồ phòng học</title>
     <link rel="stylesheet" href="../../assets/css/base.css" />
     <link rel="stylesheet" href="../../assets/css/layout.css" />
     <link rel="stylesheet" href="../../assets/css/components.css" />
@@ -21,28 +21,28 @@
         </header>
 
         <section class="panel room-map-panel">
-          <h1 class="page-title">Sơ đồ phòng học</h1>
-          <p class="room-map-hint">Chọn tòa nhà trên sơ đồ để xem danh sách phòng.</p>
+          <h1 class="page-title" data-i18n="roomMap.pageTitle">Sơ đồ phòng học</h1>
+          <p class="room-map-hint" data-i18n="roomMap.hint">Chọn tòa nhà trên sơ đồ để xem danh sách phòng.</p>
 
-          <div class="campus-map-wrap" role="region" aria-label="Sơ đồ khuôn viên">
+          <div class="campus-map-wrap" role="region" data-i18n-aria-label="roomMap.campusAria" aria-label="Sơ đồ khuôn viên">
             <div class="campus-map">
               <div class="campus-map__plot">
-                <a class="campus-building area-e10" href="../dashboard/departments.html?building=E10" data-building="E10"><span class="campus-building__label">Nhà E10</span></a>
-                <a class="campus-building area-e6" href="../dashboard/departments.html?building=E6" data-building="E6"><span class="campus-building__label">Nhà E6</span></a>
-                <a class="campus-building area-e9" href="../dashboard/departments.html?building=E9" data-building="E9"><span class="campus-building__label">Nhà E9</span></a>
-                <a class="campus-building area-e7" href="../dashboard/departments.html?building=E7" data-building="E7"><span class="campus-building__label">Nhà E7</span></a>
-                <a class="campus-building area-e1" href="../dashboard/departments.html?building=E1" data-building="E1"><span class="campus-building__label">Nhà E1</span></a>
-                <a class="campus-building area-e5" href="../dashboard/departments.html?building=E5" data-building="E5"><span class="campus-building__label">Nhà E5</span></a>
-                <a class="campus-building area-e4" href="../dashboard/departments.html?building=E4" data-building="E4"><span class="campus-building__label">Nhà E4</span></a>
-                <a class="campus-building area-e3" href="../dashboard/departments.html?building=E3" data-building="E3"><span class="campus-building__label">Nhà E3</span></a>
-                <div class="campus-block area-nhaxe"><span class="campus-building__label">Nhà xe</span></div>
-                <a class="campus-building area-e8" href="../dashboard/departments.html?building=E8" data-building="E8"><span class="campus-building__label">Nhà E8</span></a>
-                <a class="campus-building area-eb8" href="../dashboard/departments.html?building=EB8" data-building="EB8"><span class="campus-building__label">Nhà EB8</span></a>
-                <a class="campus-building area-gddn" href="../dashboard/departments.html?building=GDDN" data-building="GDDN"><span class="campus-building__label">Tòa nhà đa năng</span></a>
-                <a class="campus-building area-c2" href="../dashboard/departments.html?building=C2" data-building="C2"><span class="campus-building__label">Nhà C2</span></a>
-                <a class="campus-building area-c1" href="../dashboard/departments.html?building=C1" data-building="C1"><span class="campus-building__label">Nhà C1</span></a>
-                <a class="campus-building area-cantin" href="../dashboard/departments.html?building=CANTIN" data-building="CANTIN"><span class="campus-building__label">Căn Tin</span></a>
-                <a class="campus-building area-c3" href="../dashboard/departments.html?building=C3" data-building="C3"><span class="campus-building__label">Nhà C3</span></a>
+                <a class="campus-building area-e10" href="../dashboard/departments.html?building=E10" data-building="E10"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E10"}'>Nhà E10</span></a>
+                <a class="campus-building area-e6" href="../dashboard/departments.html?building=E6" data-building="E6"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E6"}'>Nhà E6</span></a>
+                <a class="campus-building area-e9" href="../dashboard/departments.html?building=E9" data-building="E9"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E9"}'>Nhà E9</span></a>
+                <a class="campus-building area-e7" href="../dashboard/departments.html?building=E7" data-building="E7"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E7"}'>Nhà E7</span></a>
+                <a class="campus-building area-e1" href="../dashboard/departments.html?building=E1" data-building="E1"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E1"}'>Nhà E1</span></a>
+                <a class="campus-building area-e5" href="../dashboard/departments.html?building=E5" data-building="E5"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E5"}'>Nhà E5</span></a>
+                <a class="campus-building area-e4" href="../dashboard/departments.html?building=E4" data-building="E4"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E4"}'>Nhà E4</span></a>
+                <a class="campus-building area-e3" href="../dashboard/departments.html?building=E3" data-building="E3"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E3"}'>Nhà E3</span></a>
+                <div class="campus-block area-nhaxe"><span class="campus-building__label" data-i18n="roomMap.parking">Nhà xe</span></div>
+                <a class="campus-building area-e8" href="../dashboard/departments.html?building=E8" data-building="E8"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"E8"}'>Nhà E8</span></a>
+                <a class="campus-building area-eb8" href="../dashboard/departments.html?building=EB8" data-building="EB8"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"EB8"}'>Nhà EB8</span></a>
+                <a class="campus-building area-gddn" href="../dashboard/departments.html?building=GDDN" data-building="GDDN"><span class="campus-building__label" data-i18n="menu.venueLectureHall">Tòa nhà đa năng</span></a>
+                <a class="campus-building area-c2" href="../dashboard/departments.html?building=C2" data-building="C2"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"C2"}'>Nhà C2</span></a>
+                <a class="campus-building area-c1" href="../dashboard/departments.html?building=C1" data-building="C1"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"C1"}'>Nhà C1</span></a>
+                <a class="campus-building area-cantin" href="../dashboard/departments.html?building=CANTIN" data-building="CANTIN"><span class="campus-building__label" data-i18n="menu.venueCanteen">Căn Tin</span></a>
+                <a class="campus-building area-c3" href="../dashboard/departments.html?building=C3" data-building="C3"><span class="campus-building__label" data-i18n="menu.buildingNamed" data-i18n-params='{"name":"C3"}'>Nhà C3</span></a>
               </div>
             </div>
           </div>

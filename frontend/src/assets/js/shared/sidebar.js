@@ -111,6 +111,10 @@
     "Kiểm kê định kỳ": "menu.auditPeriodic",
     "Periodic inventory": "menu.auditPeriodic",
     "定期棚卸": "menu.auditPeriodic",
+    "Hệ thống CSVC": "menu.systemRoot",
+    "Facilities system": "menu.systemRoot",
+    "CSVC system": "menu.systemRoot",
+    "施設管理システム": "menu.systemRoot",
   };
 
   /** Ẩn nhóm "Phòng" / Room và toàn bộ menu con (theo title hoặc mã name từ API). */
@@ -755,6 +759,32 @@
       window.FmI18n?.apply?.(host);
     }
   }
+
+  function translateMenuTitle(title) {
+    const t = String(title || "").trim();
+    if (!t) return "";
+    const key = MENU_TITLE_TO_I18N_KEY[t];
+    if (key) {
+      const v = window.FmI18n?.t?.(key);
+      if (v && v !== key) return window.FmI18n?.tPlain?.(key) || v;
+    }
+    const venueKey = { "Giảng đường Đa Năng": "menu.venueLectureHall", "Căn Tin": "menu.venueCanteen" }[t];
+    if (venueKey) {
+      const v = window.FmI18n?.t?.(venueKey);
+      if (v && v !== venueKey) return window.FmI18n?.tPlain?.(venueKey) || v;
+    }
+    const m = t.match(/^(?:Nhà|Tòa nhà|Phòng học)\s+(.+)$/i);
+    if (m) {
+      const v = window.FmI18n?.tPlain?.("menu.buildingNamed", { name: m[1].trim() });
+      if (v && v !== "menu.buildingNamed") return v;
+    }
+    return t;
+  }
+
+  window.FmMenuTitleI18n = {
+    translate: translateMenuTitle,
+    MENU_TITLE_TO_I18N_KEY,
+  };
 
   window.AppSidebar = {
     mountSidebar,

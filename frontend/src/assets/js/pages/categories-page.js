@@ -23,6 +23,34 @@
   let activeCategoryConfigKey = "default";
   let activeCategoryTab = "list";
   let refreshCategoryTable = () => {};
+  /** Dữ liệu gốc từ API — dùng lại khi đổi ngôn ngữ. */
+  let cachedCategoryList = [];
+  let cachedCategoryConfigKey = "default";
+
+  const translateCategoryDisplayName = (code, name, configKey) => {
+    const c = String(code || "").trim().toUpperCase();
+    const nameRaw = String(name || "").trim();
+    if (c) {
+      const prefix = configKey === "nguon-kinh-phi" ? "fundSourceNames" : "assetNames";
+      const bundleKey = `${prefix}.${c}`;
+      const fromKey = window.FmI18n?.tPlain?.(bundleKey);
+      if (fromKey && fromKey !== bundleKey) return fromKey;
+    }
+    if (configKey !== "nguon-kinh-phi" && window.FmAssetName?.translate) {
+      const fromAsset = window.FmAssetName.translate(nameRaw, c, null);
+      if (fromAsset) return fromAsset;
+    }
+    return nameRaw;
+  };
+
+  const ensureI18nReady = async () => {
+    if (!window.FmI18n?.loadBundle || !window.FmI18n?.getLocale) return;
+    try {
+      await window.FmI18n.loadBundle(window.FmI18n.getLocale());
+    } catch (_) {
+      /* ignore */
+    }
+  };
 
   const categoryConfigs = {
     default: {
@@ -67,7 +95,8 @@
     const rows = sorted.map((c) => {
       const id = String(c.id != null ? c.id : "");
       const code = String(c.code || c.categoryCode || "");
-      const name = String(c.name || c.categoryName || "");
+      const nameRaw = String(c.name || c.categoryName || "");
+      const name = translateCategoryDisplayName(code, nameRaw, configKey);
       if (configKey === "nguon-kinh-phi") {
         return [id, code, name, "—", "—", "—", "—", "Sửa/Xóa"];
       }
@@ -83,7 +112,9 @@
     try {
       const thamSo = type ? { type } : {};
       const list = await api.layDanhSachDanhMuc(thamSo);
-      cfg.rows = mapDanhMucThanhHang(list, configKey);
+      cachedCategoryList = Array.isArray(list) ? list : [];
+      cachedCategoryConfigKey = configKey;
+      cfg.rows = mapDanhMucThanhHang(cachedCategoryList, configKey);
       return true;
     } catch (err) {
       console.warn("[Danh mục] Không tải được từ API:", err);
@@ -170,6 +201,14 @@
     </td>`;
   };
 
+  const rawCategoryNameByCode = (code) => {
+    const c = String(code || "").trim();
+    const hit = cachedCategoryList.find(
+      (item) => String(item.code || item.categoryCode || "").trim() === c,
+    );
+    return String(hit?.name || hit?.categoryName || "").trim();
+  };
+
   const renderCategoryRows = (rows) => {
     if (!categoryTableBody) return;
     categoryTableBody.innerHTML = rows
@@ -179,8 +218,15 @@
         cells.pop();
         const id = cells[0] ?? "";
         const code = cells[1] ?? "";
-        const dataTds = cells.map((c) => `<td>${c}</td>`).join("");
-        return `<tr>${dataTds}${categoryActionButtonsHtml(id, code)}</tr>`;
+        const rawName = rawCategoryNameByCode(code) || String(cells[2] ?? "");
+        const displayName = translateCategoryDisplayName(code, rawName, cachedCategoryConfigKey);
+        const dataTds = cells
+          .map((c, i) => {
+            const text = i === 2 ? displayName : c;
+            return `<td>${escapeCategoryText(text)}</td>`;
+          })
+          .join("");
+        return `<tr data-category-name="${escapeCategoryAttr(rawName)}">${dataTds}${categoryActionButtonsHtml(id, code)}</tr>`;
       })
       .join("");
   };
@@ -242,8 +288,10 @@
       } catch (_) {}
     }
     if (!viewKey || viewKey === "default") {
+      await ensureI18nReady();
       await taiDanhMucTuApi("ASSET", "default");
     } else if (viewKey === "nguon-kinh-phi") {
+      await ensureI18nReady();
       await taiDanhMucTuApi("FUND_SOURCE", "nguon-kinh-phi");
     }
     const config = categoryConfigs[viewKey] || categoryConfigs.default;
@@ -391,14 +439,18 @@
 
     const cells = row.querySelectorAll("td");
     if (cells.length < 3) return;
-    const name = cells[2]?.textContent?.trim() || "";
     const code = cells[1]?.textContent?.trim() || "";
+    const displayName = cells[2]?.textContent?.trim() || "";
+    const name = row.getAttribute("data-category-name") || displayName;
 
     if (updateBtn) {
       const config = categoryConfigs[activeCategoryConfigKey] || categoryConfigs.default;
       const labels = (config.columns || []).slice(0, -1);
       const dataTds = Array.from(cells).slice(0, -1);
-      const values = dataTds.map((td) => td.textContent?.trim() || "");
+      const values = dataTds.map((td, i) => {
+        if (i === 2) return rawCategoryNameByCode(code) || td.textContent?.trim() || "";
+        return td.textContent?.trim() || "";
+      });
       try {
         sessionStorage.setItem(
           "categoryEditDraft",
@@ -415,7 +467,9 @@
       return;
     }
     if (deleteBtn) {
-      const delMsg = window.FmI18n?.t?.("categories.confirmDelete", { name }) || `Bạn có chắc muốn xóa danh mục "${name}"?`;
+      const delMsg =
+        window.FmI18n?.t?.("categories.confirmDelete", { name: displayName }) ||
+        `Bạn có chắc muốn xóa danh mục "${displayName}"?`;
       if (!window.confirm(delMsg)) return;
       const idDanhMuc = cells[0]?.textContent?.trim() || "";
       if (idDanhMuc && window.CoSoApi?.xoaDanhMuc) {
@@ -528,6 +582,22 @@
         form: Fm.formToPlainObject(categoryForm),
       });
     }
+  });
+
+  const refreshCategoryRowsI18n = () => {
+    const cfg = categoryConfigs[cachedCategoryConfigKey] || categoryConfigs.default;
+    if (!cachedCategoryList.length) return;
+    cfg.rows = mapDanhMucThanhHang(cachedCategoryList, cachedCategoryConfigKey);
+    renderCategoryRows(cfg.rows);
+    refreshCategoryTable();
+    window.FmI18n?.apply?.(categoryTableBody);
+  };
+
+  window.addEventListener("fm-i18n-applied", () => {
+    refreshCategoryRowsI18n();
+    const config = categoryConfigs[activeCategoryConfigKey] || categoryConfigs.default;
+    renderCategoryHead(config.columns);
+    window.FmI18n?.apply?.(document.querySelector("main.content"));
   });
 
   void applyCategoryView();
