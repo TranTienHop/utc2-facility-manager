@@ -239,4 +239,3 @@ docker compose down -v    # reset DB (xóa volume MySQL)
 
 **Môn:** Công nghệ Java — **
 **Trường:** ĐH Giao thông Vận tải — Phân hiệu TP. Hồ Chí Minh
-<img width="426" height="388" alt="image" src="https://github.com/user-attachments/assets/3606f7ee-6efc-4d3a-8053-bb934a3365d6" />
