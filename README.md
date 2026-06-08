@@ -170,17 +170,6 @@ docker compose up -d --build
 | `nv001` | `123456` | STAFF |
 | `sv001` | `123456` | STUDENT |
 
-### 4.4 Lệnh hữu ích
-
-```bash
-docker compose ps
-docker compose logs -f backend
-docker compose down
-docker compose down -v    # reset DB (xóa volume MySQL)
-```
-
-> **Lưu ý:** MySQL chỉ import script khi volume mới. Muốn reset DB: `docker compose down -v` rồi `docker compose up -d --build`.
-
 ---
 
 ## 5. Giao diện hệ thống
